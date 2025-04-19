@@ -42,7 +42,8 @@ if(NOT DEFINED FMT_DIR)
           -D__APPLE__=0
           -DCMAKE_TOOLCHAIN_FILE:FILEPATH=${TOOLCHAIN_FILE_ABS}
           -DFMT_TEST:BOOL=OFF
-          -DCMAKE_CXX_FLAGS="-nostdinc++ -isystem ${CMAKE_ARMHF_TOOLCHAIN_CPPROOT}"  # 关键隔离选项
+          -DCMAKE_C_FLAGS="${CMAKE_C_FLAGS} -nostdinc -isystem ${CMAKE_ARMHF_TOOLCHAIN_GCCROOT}"
+          -DCMAKE_CXX_FLAGS="${CMAKE_CXX_FLAGS} -nostdinc++ -isystem ${CMAKE_ARMHF_TOOLCHAIN_CPPROOT}"  # 关键隔离选项
           --no-warn-unused-cli  # 抑制无关警告
   )
   add_dependencies(piper fmt_external)
@@ -66,7 +67,8 @@ if(NOT DEFINED SPDLOG_DIR)
           -DCMAKE_SYSTEM_PROCESSOR=armv7l
           -D__APPLE__=0
           -DCMAKE_INSTALL_PREFIX=${SPDLOG_DIR}
-          -DCMAKE_CXX_FLAGS="-nostdinc++ -isystem ${CMAKE_ARMHF_TOOLCHAIN_CPPROOT}"  # 关键隔离选项
+          -DCMAKE_C_FLAGS="${CMAKE_C_FLAGS} -nostdinc -isystem ${CMAKE_ARMHF_TOOLCHAIN_GCCROOT}"
+          -DCMAKE_CXX_FLAGS="${CMAKE_CXX_FLAGS} -nostdinc++ -isystem ${CMAKE_ARMHF_TOOLCHAIN_CPPROOT}"  # 关键隔离选项
           --no-warn-unused-cli  # 抑制无关警告
   )
   add_dependencies(piper spdlog_external)
@@ -89,7 +91,8 @@ if(NOT DEFINED PIPER_PHONEMIZE_DIR)
           -DCMAKE_SYSTEM_PROCESSOR=armv7l
           -D__APPLE__=0
           -DCMAKE_INSTALL_PREFIX:PATH=${PIPER_PHONEMIZE_DIR}
-          -DCMAKE_CXX_FLAGS="-nostdinc++ -isystem ${CMAKE_ARMHF_TOOLCHAIN_CPPROOT}"  # 关键隔离选项
+          -DCMAKE_C_FLAGS="${CMAKE_C_FLAGS} -nostdinc -isystem ${CMAKE_ARMHF_TOOLCHAIN_GCCROOT}"
+          -DCMAKE_CXX_FLAGS="${CMAKE_CXX_FLAGS} -nostdinc++ -isystem ${CMAKE_ARMHF_TOOLCHAIN_CPPROOT}"  # 关键隔离选项
           --no-warn-unused-cli  # 抑制无关警告
   )
   add_dependencies(piper piper_phonemize_external)

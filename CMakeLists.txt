@@ -37,8 +37,6 @@ if(NOT DEFINED FMT_DIR)
     URL "https://github.com/fmtlib/fmt/archive/refs/tags/${FMT_VERSION}.zip"
     CMAKE_ARGS
           -DCMAKE_TOOLCHAIN_FILE=${TOOLCHAIN_FILE_ABS}
-          -DCMAKE_SYSTEM_NAME=Linux
-          -DCMAKE_SYSTEM_PROCESSOR=armv7l
           -DCMAKE_TOOLCHAIN_FILE:FILEPATH=${TOOLCHAIN_FILE_ABS}
           -DFMT_TEST:BOOL=OFF
           -DCMAKE_C_FLAGS="${CMAKE_C_FLAGS} "
@@ -60,14 +58,8 @@ if(NOT DEFINED SPDLOG_DIR)
     spdlog_external
     PREFIX "${CMAKE_CURRENT_BINARY_DIR}/s"
     URL "https://github.com/vickyleu/spdlog/archive/refs/tags/1.0.0.zip"
-    # 添加补丁命令，在下载和解压后、配置前运行
-    PATCH_COMMAND ${CMAKE_COMMAND} -E echo "Patching spdlog sources..." &&
-      sed -i "s/#if defined __APPLE__/#if 0 \/\/ 禁用 __APPLE__ 检查/g"
-      <SOURCE_DIR>/include/spdlog/details/os-inl.h
     CMAKE_ARGS
           -DCMAKE_TOOLCHAIN_FILE=${TOOLCHAIN_FILE_ABS}
-          -DCMAKE_SYSTEM_NAME=Linux
-          -DCMAKE_SYSTEM_PROCESSOR=armv7l
           -DCMAKE_INSTALL_PREFIX=${SPDLOG_DIR}
           -DCMAKE_C_FLAGS="${CMAKE_C_FLAGS} "
           -DCMAKE_CXX_FLAGS="${CMAKE_CXX_FLAGS} "  # 关键隔离选项
@@ -89,8 +81,6 @@ if(NOT DEFINED PIPER_PHONEMIZE_DIR)
     URL "https://github.com/vickyleu/piper-phonemize/archive/refs/heads/master.zip"
     CMAKE_ARGS
           -DCMAKE_TOOLCHAIN_FILE=${TOOLCHAIN_FILE_ABS}
-          -DCMAKE_SYSTEM_NAME=Linux
-          -DCMAKE_SYSTEM_PROCESSOR=armv7l
           -DCMAKE_INSTALL_PREFIX:PATH=${PIPER_PHONEMIZE_DIR}
           -DCMAKE_C_FLAGS="${CMAKE_C_FLAGS} "
           -DCMAKE_CXX_FLAGS="${CMAKE_CXX_FLAGS}  "

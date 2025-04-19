@@ -38,6 +38,8 @@ if(NOT DEFINED FMT_DIR)
     CMAKE_ARGS
           -DCMAKE_TOOLCHAIN_FILE=${TOOLCHAIN_FILE_ABS}
           -DCMAKE_TOOLCHAIN_FILE:FILEPATH=${TOOLCHAIN_FILE_ABS}
+          -DCMAKE_SYSTEM_NAME=Linux
+          -DCMAKE_SYSTEM_PROCESSOR=armv7l
           -DFMT_TEST:BOOL=OFF
           -DCMAKE_C_FLAGS="${CMAKE_C_FLAGS} "
           -DCMAKE_CXX_FLAGS="${CMAKE_CXX_FLAGS} "  # 关键隔离选项
@@ -60,6 +62,8 @@ if(NOT DEFINED SPDLOG_DIR)
     URL "https://github.com/vickyleu/spdlog/archive/refs/tags/1.0.0.zip"
     CMAKE_ARGS
           -DCMAKE_TOOLCHAIN_FILE=${TOOLCHAIN_FILE_ABS}
+          -DCMAKE_SYSTEM_NAME=Linux
+          -DCMAKE_SYSTEM_PROCESSOR=armv7l
           -DCMAKE_INSTALL_PREFIX=${SPDLOG_DIR}
           -DCMAKE_C_FLAGS="${CMAKE_C_FLAGS} "
           -DCMAKE_CXX_FLAGS="${CMAKE_CXX_FLAGS} "  # 关键隔离选项
@@ -81,6 +85,8 @@ if(NOT DEFINED PIPER_PHONEMIZE_DIR)
     URL "https://github.com/vickyleu/piper-phonemize/archive/refs/heads/master.zip"
     CMAKE_ARGS
           -DCMAKE_TOOLCHAIN_FILE=${TOOLCHAIN_FILE_ABS}
+          -DCMAKE_SYSTEM_NAME=Linux
+          -DCMAKE_SYSTEM_PROCESSOR=armv7l
           -DCMAKE_INSTALL_PREFIX:PATH=${PIPER_PHONEMIZE_DIR}
           -DCMAKE_C_FLAGS="${CMAKE_C_FLAGS} "
           -DCMAKE_CXX_FLAGS="${CMAKE_CXX_FLAGS}  "

@@ -35,12 +35,15 @@ if(NOT DEFINED FMT_DIR)
     fmt_external
     PREFIX "${CMAKE_CURRENT_BINARY_DIR}/f"
     URL "https://github.com/fmtlib/fmt/archive/refs/tags/${FMT_VERSION}.zip"
-    CMAKE_ARGS -DCMAKE_SYSTEM_NAME=Linux
-    CMAKE_ARGS -DCMAKE_SYSTEM_PROCESSOR=armv7l
-    CMAKE_ARGS -D__APPLE__=0
-    CMAKE_ARGS -DCMAKE_TOOLCHAIN_FILE:FILEPATH=${TOOLCHAIN_FILE_ABS}
-    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=${FMT_DIR}
-    CMAKE_ARGS -DFMT_TEST:BOOL=OFF  # Don't build all the tests
+    CMAKE_ARGS
+          -DCMAKE_TOOLCHAIN_FILE=${TOOLCHAIN_FILE_ABS}
+          -DCMAKE_SYSTEM_NAME=Linux
+          -DCMAKE_SYSTEM_PROCESSOR=armv7l
+          -D__APPLE__=0
+          -DCMAKE_TOOLCHAIN_FILE:FILEPATH=${TOOLCHAIN_FILE_ABS}
+          -DFMT_TEST:BOOL=OFF
+          -DCMAKE_CXX_FLAGS="-nostdinc++ -isystem ${CMAKE_ARMHF_TOOLCHAIN_CPPROOT}"  # 关键隔离选项
+          --no-warn-unused-cli  # 抑制无关警告
   )
   add_dependencies(piper fmt_external)
   add_dependencies(test_piper fmt_external)
@@ -57,11 +60,14 @@ if(NOT DEFINED SPDLOG_DIR)
     spdlog_external
     PREFIX "${CMAKE_CURRENT_BINARY_DIR}/s"
     URL "https://github.com/gabime/spdlog/archive/refs/tags/v${SPDLOG_VERSION}.zip"
-    CMAKE_ARGS -DCMAKE_SYSTEM_NAME=Linux
-    CMAKE_ARGS -DCMAKE_SYSTEM_PROCESSOR=armv7l
-    CMAKE_ARGS -D__APPLE__=0
-    CMAKE_ARGS -DCMAKE_TOOLCHAIN_FILE:FILEPATH=${TOOLCHAIN_FILE_ABS}
-    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=${SPDLOG_DIR}
+          CMAKE_ARGS
+          -DCMAKE_TOOLCHAIN_FILE=${TOOLCHAIN_FILE_ABS}
+          -DCMAKE_SYSTEM_NAME=Linux
+          -DCMAKE_SYSTEM_PROCESSOR=armv7l
+          -D__APPLE__=0
+          -DCMAKE_INSTALL_PREFIX=${SPDLOG_DIR}
+          -DCMAKE_CXX_FLAGS="-nostdinc++ -isystem ${CMAKE_ARMHF_TOOLCHAIN_CPPROOT}"  # 关键隔离选项
+          --no-warn-unused-cli  # 抑制无关警告
   )
   add_dependencies(piper spdlog_external)
   add_dependencies(test_piper spdlog_external)
@@ -77,11 +83,14 @@ if(NOT DEFINED PIPER_PHONEMIZE_DIR)
     piper_phonemize_external
     PREFIX "${CMAKE_CURRENT_BINARY_DIR}/p"
     URL "https://github.com/vickyleu/piper-phonemize/archive/refs/heads/master.zip"
-    CMAKE_ARGS -DCMAKE_SYSTEM_NAME=Linux
-    CMAKE_ARGS -DCMAKE_SYSTEM_PROCESSOR=armv7l
-    CMAKE_ARGS -D__APPLE__=0
-    CMAKE_ARGS -DCMAKE_TOOLCHAIN_FILE:FILEPATH=${TOOLCHAIN_FILE_ABS}
-    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=${PIPER_PHONEMIZE_DIR}
+    CMAKE_ARGS
+          -DCMAKE_TOOLCHAIN_FILE=${TOOLCHAIN_FILE_ABS}
+          -DCMAKE_SYSTEM_NAME=Linux
+          -DCMAKE_SYSTEM_PROCESSOR=armv7l
+          -D__APPLE__=0
+          -DCMAKE_INSTALL_PREFIX:PATH=${PIPER_PHONEMIZE_DIR}
+          -DCMAKE_CXX_FLAGS="-nostdinc++ -isystem ${CMAKE_ARMHF_TOOLCHAIN_CPPROOT}"  # 关键隔离选项
+          --no-warn-unused-cli  # 抑制无关警告
   )
   add_dependencies(piper piper_phonemize_external)
   add_dependencies(test_piper piper_phonemize_external)

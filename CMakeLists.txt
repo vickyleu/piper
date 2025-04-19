@@ -28,12 +28,14 @@ add_executable(test_piper src/cpp/test.cpp src/cpp/piper.cpp)
 if(NOT DEFINED FMT_DIR)
   set(FMT_VERSION "10.0.0")
   set(FMT_DIR "${CMAKE_CURRENT_BINARY_DIR}/fi")
-
+  # 获取当前工具链文件的绝对路径
+  get_filename_component(TOOLCHAIN_FILE_ABS "${CMAKE_TOOLCHAIN_FILE}" ABSOLUTE)
   include(ExternalProject)
   ExternalProject_Add(
     fmt_external
     PREFIX "${CMAKE_CURRENT_BINARY_DIR}/f"
     URL "https://github.com/fmtlib/fmt/archive/refs/tags/${FMT_VERSION}.zip"
+    CMAKE_ARGS -DCMAKE_TOOLCHAIN_FILE:FILEPATH=${TOOLCHAIN_FILE_ABS}
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=${FMT_DIR}
     CMAKE_ARGS -DFMT_TEST:BOOL=OFF  # Don't build all the tests
   )
@@ -46,10 +48,13 @@ endif()
 if(NOT DEFINED SPDLOG_DIR)
   set(SPDLOG_DIR "${CMAKE_CURRENT_BINARY_DIR}/si")
   set(SPDLOG_VERSION "1.12.0")
+  # 获取当前工具链文件的绝对路径
+  get_filename_component(TOOLCHAIN_FILE_ABS "${CMAKE_TOOLCHAIN_FILE}" ABSOLUTE)
   ExternalProject_Add(
     spdlog_external
     PREFIX "${CMAKE_CURRENT_BINARY_DIR}/s"
     URL "https://github.com/gabime/spdlog/archive/refs/tags/v${SPDLOG_VERSION}.zip"
+    CMAKE_ARGS -DCMAKE_TOOLCHAIN_FILE:FILEPATH=${TOOLCHAIN_FILE_ABS}
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=${SPDLOG_DIR}
   )
   add_dependencies(piper spdlog_external)
@@ -60,10 +65,13 @@ endif()
 
 if(NOT DEFINED PIPER_PHONEMIZE_DIR)
   set(PIPER_PHONEMIZE_DIR "${CMAKE_CURRENT_BINARY_DIR}/pi")
+  # 获取当前工具链文件的绝对路径
+  get_filename_component(TOOLCHAIN_FILE_ABS "${CMAKE_TOOLCHAIN_FILE}" ABSOLUTE)
   ExternalProject_Add(
     piper_phonemize_external
     PREFIX "${CMAKE_CURRENT_BINARY_DIR}/p"
-    URL "https://github.com/rhasspy/piper-phonemize/archive/refs/heads/master.zip"
+    URL "https://github.com/vickyleu/piper-phonemize/archive/refs/heads/master.zip"
+    CMAKE_ARGS -DCMAKE_TOOLCHAIN_FILE:FILEPATH=${TOOLCHAIN_FILE_ABS}
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=${PIPER_PHONEMIZE_DIR}
   )
   add_dependencies(piper piper_phonemize_external)

@@ -35,10 +35,6 @@ if(NOT DEFINED FMT_DIR)
     fmt_external
     PREFIX "${CMAKE_CURRENT_BINARY_DIR}/f"
     URL "https://github.com/fmtlib/fmt/archive/refs/tags/${FMT_VERSION}.zip"
-     # 添加补丁命令，在下载和解压后、配置前运行
-     PATCH_COMMAND ${CMAKE_COMMAND} -E echo "Patching spdlog sources..." &&
-     sed -i "s/#if defined __APPLE__/#if 0 \/\/ 禁用 __APPLE__ 检查/g"
-     <SOURCE_DIR>/include/spdlog/details/os-inl.h
     CMAKE_ARGS
           -DCMAKE_TOOLCHAIN_FILE=${TOOLCHAIN_FILE_ABS}
           -DCMAKE_SYSTEM_NAME=Linux
@@ -93,10 +89,6 @@ if(NOT DEFINED PIPER_PHONEMIZE_DIR)
     piper_phonemize_external
     PREFIX "${CMAKE_CURRENT_BINARY_DIR}/p"
     URL "https://github.com/vickyleu/piper-phonemize/archive/refs/heads/master.zip"
-     # 添加补丁命令，在下载和解压后、配置前运行
-     PATCH_COMMAND ${CMAKE_COMMAND} -E echo "Patching spdlog sources..." &&
-     sed -i "s/#if defined __APPLE__/#if 0 \/\/ 禁用 __APPLE__ 检查/g"
-     <SOURCE_DIR>/include/spdlog/details/os-inl.h
     CMAKE_ARGS
           -DCMAKE_TOOLCHAIN_FILE=${TOOLCHAIN_FILE_ABS}
           -DCMAKE_SYSTEM_NAME=Linux

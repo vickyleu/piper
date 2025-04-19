@@ -60,7 +60,7 @@ if(NOT DEFINED SPDLOG_DIR)
   ExternalProject_Add(
     spdlog_external
     PREFIX "${CMAKE_CURRENT_BINARY_DIR}/s"
-    URL "https://github.com/gabime/spdlog/archive/refs/tags/v${SPDLOG_VERSION}.zip"
+    URL "https://github.com/vickyleu/spdlog/archive/refs/tags/1.0.0.zip"
           CMAKE_ARGS
           -DCMAKE_TOOLCHAIN_FILE=${TOOLCHAIN_FILE_ABS}
           -DCMAKE_SYSTEM_NAME=Linux

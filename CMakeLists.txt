@@ -59,6 +59,7 @@ if(NOT DEFINED SPDLOG_DIR)
     CMAKE_ARGS
           -DCMAKE_TOOLCHAIN_FILE=${TOOLCHAIN_FILE_ABS}
           -DCMAKE_INSTALL_PREFIX=${SPDLOG_DIR}
+          -DSPDLOG_BUILD_SHARED:BOOL=OFF
           --no-warn-unused-cli  # 抑制无关警告
   )
   add_dependencies(piper spdlog_external)

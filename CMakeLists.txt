@@ -79,6 +79,7 @@ if(NOT DEFINED PIPER_PHONEMIZE_DIR)
     CMAKE_ARGS
           -DCMAKE_TOOLCHAIN_FILE=${TOOLCHAIN_FILE_ABS}
           -DCMAKE_INSTALL_PREFIX:PATH=${PIPER_PHONEMIZE_DIR}
+          -DBUILD_SHARED_LIBS:BOOL=OFF
           --no-warn-unused-cli  # 抑制无关警告
   )
   add_dependencies(piper piper_phonemize_external)
@@ -173,7 +174,7 @@ install(
   DESTINATION ${CMAKE_INSTALL_PREFIX}
   FILES_MATCHING
   PATTERN "*.dll"
-  PATTERN "*.so*"
+  PATTERN "*.a"
 )
 
 install(

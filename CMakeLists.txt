@@ -175,6 +175,7 @@ install(
   DESTINATION ${CMAKE_INSTALL_PREFIX}
   FILES_MATCHING
   PATTERN "*.dll"
+  PATTERN "*.so"
   PATTERN "*.a"
 )
 

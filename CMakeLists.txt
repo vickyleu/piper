@@ -37,6 +37,7 @@ if(NOT DEFINED FMT_DIR)
     URL "https://github.com/fmtlib/fmt/archive/refs/tags/${FMT_VERSION}.zip"
     CMAKE_ARGS
           -DCMAKE_TOOLCHAIN_FILE:FILEPATH=${TOOLCHAIN_FILE_ABS}
+          -DFMT_INSTALL:BOOL=OFF
           -DFMT_TEST:BOOL=OFF
           --no-warn-unused-cli  # 抑制无关警告
   )

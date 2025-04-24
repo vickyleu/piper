@@ -93,8 +93,7 @@ if((NOT MSVC) AND (NOT APPLE))
   # Linux flags
   string(APPEND CMAKE_CXX_FLAGS " -Wall -Wextra -Wl,-rpath,'$ORIGIN'")
   string(APPEND CMAKE_C_FLAGS " -Wall -Wextra")
-  target_link_libraries(piper -static-libgcc -static-libstdc++)
-
+  target_link_options(piper PRIVATE -static-libgcc -static-libstdc++)
   set(PIPER_EXTRA_LIBRARIES "pthread")
 endif()
 

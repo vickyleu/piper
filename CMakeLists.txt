@@ -98,14 +98,20 @@ if((NOT MSVC) AND (NOT APPLE))
   set(PIPER_EXTRA_LIBRARIES "pthread")
 endif()
 
-target_link_libraries(piper
+set(THREADS_PREFER_PTHREAD_FLAG ON)            # 优先使用 -pthread
+find_package(Threads REQUIRED)                 # 查找线程库
+# 使用关键字签名，避免 plain/keyword 混用
+target_link_libraries(piper PRIVATE
   fmt
   spdlog
   espeak-ng
   piper_phonemize
   onnxruntime
+  Threads::Threads    # 推荐用 Threads 模块链接 pthread
+  dl
   ${PIPER_EXTRA_LIBRARIES}
 )
+
 
 target_link_directories(piper PUBLIC
   ${FMT_DIR}/lib

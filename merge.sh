@@ -33,7 +33,7 @@ arm-linux-gnueabihf-ar -M < script.mri
 
 echo "生成可重定位对象文件..."
 arm-linux-gnueabihf-ld -r --whole-archive -o piper_full.o libpiper.a
-
+armv7-unknown-linux-gnueabihf-nm -r --whole-archive -o vosk_full.o libvosk.a
 echo "重建最终静态库..."
 arm-linux-gnueabihf-ar crs libpiper_relocatable.a piper_full.o
 mv -f libpiper_relocatable.a libpiper.a

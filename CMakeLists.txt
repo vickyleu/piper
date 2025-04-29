@@ -16,9 +16,9 @@ elseif(NOT APPLE)
   string(APPEND CMAKE_CXX_FLAGS " -Wall -Wextra -Wl,-rpath,'$ORIGIN'")
   string(APPEND CMAKE_C_FLAGS " -Wall -Wextra")
 endif()
-
-add_executable(piper src/cpp/main.cpp src/cpp/piper.cpp)
-add_executable(test_piper src/cpp/test.cpp src/cpp/piper.cpp)
+add_library(piper_lib STATIC src/cpp/piper.cpp)
+add_executable(piper src/cpp/main.cpp)
+add_executable(test_piper src/cpp/test.cpp)
 
 # NOTE: external project prefix are shortened because of path length restrictions on Windows
 # NOTE: onnxruntime is pulled from piper-phonemize
@@ -100,7 +100,10 @@ endif()
 set(THREADS_PREFER_PTHREAD_FLAG ON)            # 优先使用 -pthread
 find_package(Threads REQUIRED)                 # 查找线程库
 # 使用关键字签名，避免 plain/keyword 混用
-target_link_libraries(piper PRIVATE
+target_link_libraries(piper PRIVATE piper_lib)
+target_link_libraries(test_piper PRIVATE piper_lib)
+
+target_link_libraries(piper_lib PRIVATE
   fmt
   spdlog
   espeak-ng
@@ -110,21 +113,23 @@ target_link_libraries(piper PRIVATE
   dl
   ${PIPER_EXTRA_LIBRARIES}
 )
+add_dependencies(piper_lib fmt_external)
+add_dependencies(piper_lib spdlog_external)
+add_dependencies(piper_lib piper_phonemize_external)
 
-
-target_link_directories(piper PUBLIC
+target_link_directories(piper_lib PUBLIC
   ${FMT_DIR}/lib
   ${SPDLOG_DIR}/lib
   ${PIPER_PHONEMIZE_DIR}/lib
 )
 
-target_include_directories(piper PUBLIC
+target_include_directories(piper_lib PUBLIC
   ${FMT_DIR}/include
   ${SPDLOG_DIR}/include
   ${PIPER_PHONEMIZE_DIR}/include
 )
 
-target_compile_definitions(piper PUBLIC _PIPER_VERSION=${piper_version})
+target_compile_definitions(piper_lib PUBLIC _PIPER_VERSION=${piper_version})
 
 # ---- Declare test ----
 include(CTest)
@@ -183,7 +188,11 @@ install(
   PATTERN "*.so"
   PATTERN "*.a"
 )
-
+# 添加静态库到安装目标
+install(
+        TARGETS piper piper_lib
+        DESTINATION ${CMAKE_INSTALL_PREFIX}
+)
 install(
   DIRECTORY ${ESPEAK_NG_DIR}/share/espeak-ng-data
   DESTINATION ${CMAKE_INSTALL_PREFIX}

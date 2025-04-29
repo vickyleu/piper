@@ -93,7 +93,7 @@ if((NOT MSVC) AND (NOT APPLE))
   # Linux flags
   string(APPEND CMAKE_CXX_FLAGS " -Wall -Wextra -Wl,-rpath,'$ORIGIN'")
   string(APPEND CMAKE_C_FLAGS " -Wall -Wextra")
-  target_link_options(piper PRIVATE -static-libgcc -static-libstdc++)
+  target_link_options(piper_lib PRIVATE -static-libgcc -static-libstdc++)
   set(PIPER_EXTRA_LIBRARIES "pthread")
 endif()
 
@@ -200,5 +200,9 @@ install(
 
 install(
   FILES ${PIPER_PHONEMIZE_DIR}/share/libtashkeel_model.ort
+  DESTINATION ${CMAKE_INSTALL_PREFIX}
+)
+install(
+  FILES ${CMAKE_CURRENT_LIST_DIR}/merge.sh
   DESTINATION ${CMAKE_INSTALL_PREFIX}
 )

@@ -1,7 +1,7 @@
-#!/bin/bash  # 关键修改：必须使用 bash
+#!/bin/bash
 set -e
 
-rm -rf libpiper.a libpiper_relocatable.a *.o script.mri
+rm -rf libpiper.a libpiper_relocatable.a *.o libucd.a script.mri
 
 echo "创建ar脚本..."
 [ ! -f libpiper_phonemize.a ] && { echo "Error: libpiper_phonemize.a missing!"; exit 1; }
@@ -32,8 +32,7 @@ echo "执行库合并..."
 arm-linux-gnueabihf-ar -M < script.mri
 
 echo "生成可重定位对象文件..."
-arm-linux-gnueabihf-ld -r --whole-archive -o piper_full.o libpiper.a
-armv7-unknown-linux-gnueabihf-nm -r --whole-archive -o vosk_full.o libvosk.a
+arm-linux-gnueabihf-ld -z noexecstack -r  --whole-archive -o piper_full.o libpiper.a
 echo "重建最终静态库..."
 arm-linux-gnueabihf-ar crs libpiper_relocatable.a piper_full.o
 mv -f libpiper_relocatable.a libpiper.a

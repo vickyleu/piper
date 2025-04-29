@@ -194,7 +194,7 @@ install(
         DESTINATION ${CMAKE_INSTALL_PREFIX}
 )
 install(
-  DIRECTORY ${ESPEAK_NG_DIR}/share/espeak-ng-data
+  DIRECTORY ${PIPER_PHONEMIZE_DIR}/../p/src/piper_phonemize_external-build/e/src/espeak_ng_external/espeak-ng-data
   DESTINATION ${CMAKE_INSTALL_PREFIX}
 )
 

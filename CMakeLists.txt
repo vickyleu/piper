@@ -16,7 +16,7 @@ elseif(NOT APPLE)
   string(APPEND CMAKE_CXX_FLAGS " -Wall -Wextra -Wl,-rpath,'$ORIGIN'")
   string(APPEND CMAKE_C_FLAGS " -Wall -Wextra")
 endif()
-add_library(piper_lib STATIC src/cpp/piper.cpp)
+add_library(piper_lib STATIC src/cpp/piper.cpp src/cpp/piper_wrapper.cpp)
 add_executable(piper src/cpp/main.cpp)
 add_executable(test_piper src/cpp/test.cpp)
 
@@ -91,7 +91,7 @@ endif()
 
 if((NOT MSVC) AND (NOT APPLE))
   # Linux flags
-  string(APPEND CMAKE_CXX_FLAGS " -Wall -Wextra -Wl,-rpath,'$ORIGIN'")
+  string(APPEND CMAKE_CXX_FLAGS "-D_GLIBCXX_USE_CXX11_ABI=1 -Wall -Wextra -Wl,-rpath,'$ORIGIN'")
   string(APPEND CMAKE_C_FLAGS " -Wall -Wextra")
   target_link_options(piper_lib PRIVATE -static-libgcc -static-libstdc++)
   set(PIPER_EXTRA_LIBRARIES "pthread")

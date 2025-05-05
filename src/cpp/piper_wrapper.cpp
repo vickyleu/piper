@@ -15,7 +15,7 @@ struct PiperContext {
 
 // 初始化 Piper
 PiperContext* piper_wrapper_init(const char* espeak_data_path, const char* model_path,
-                                 const char* config_path, int speaker_id, const char* language) {
+                                 const char* config_path, int speaker_id, const char* language,int sampleRate,int channels) {
     try {
         // 创建 Piper 上下文
         auto context = new PiperContext();
@@ -31,6 +31,15 @@ PiperContext* piper_wrapper_init(const char* espeak_data_path, const char* model
             std::cout << "Setting voice language to: " << language << std::endl;
         }
         spdlog::set_level(spdlog::level::debug);
+        // 打印当前采样率
+        std::cout << "Original model sample rate: " << context->voice.synthesisConfig.sampleRate << std::endl;
+
+        // 设置采样率为48000Hz（或您确认设备支持的值）
+        context->voice.synthesisConfig.sampleRate = sampleRate;
+        context->voice.synthesisConfig.channels = channels;
+
+        // 再次打印确认
+        std::cout << "Modified sample rate: " << context->voice.synthesisConfig.sampleRate << std::endl;
 
         // 准备加载模型
         std::basic_string<char, std::char_traits<char>, std::allocator<char>> modelPath(model_path);

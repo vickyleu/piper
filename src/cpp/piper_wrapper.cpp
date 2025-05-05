@@ -97,7 +97,8 @@ int piper_wrapper_text_to_audio(PiperContext* context, const char* text,
                 std::string(text),  // 使用std::string构造函数
                 audioBuffer,
                 result,
-                std::function<void()>([](){})
+                nullptr
+//                std::function<void()>([](){})
         );
 
         // 检查合成结果

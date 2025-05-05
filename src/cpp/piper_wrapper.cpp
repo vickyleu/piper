@@ -102,7 +102,6 @@ int piper_wrapper_text_to_audio(PiperContext* context, const char* text,
 
         // 检查合成结果
         std::cout << "Synthesis completed. Buffer size: " << audioBuffer.size()
-                  << ", phoneme count: " << result.phonemeCount
                   << ", audio duration: " << result.audioSeconds << "s" << std::endl;
 
         // 检查音频缓冲区大小

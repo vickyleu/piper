@@ -15,7 +15,7 @@ struct PiperContext {
 
 // 初始化 Piper
 PiperContext* piper_wrapper_init(const char* espeak_data_path, const char* model_path,
-                                 const char* config_path, int speaker_id) {
+                                 const char* config_path, int speaker_id, const char* language) {
     try {
         // 创建 Piper 上下文
         auto context = new PiperContext();
@@ -24,6 +24,12 @@ PiperContext* piper_wrapper_init(const char* espeak_data_path, const char* model
         // 设置 PiperConfig
         context->config.eSpeakDataPath = espeak_data_path;
         context->config.useESpeak = true;
+        // 设置语言
+        if (language && strlen(language) > 0) {
+            // 在eSpeak配置中设置语言
+            context->voice.phonemizeConfig.eSpeak.voice = language;
+            std::cout << "Setting voice language to: " << language << std::endl;
+        }
         spdlog::set_level(spdlog::level::debug);
 
         // 准备加载模型

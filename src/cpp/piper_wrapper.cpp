@@ -4,7 +4,8 @@
 #include <vector>
 #include <iostream>
 #include <memory>
-
+#include <spdlog/sinks/stdout_color_sinks.h>
+#include <spdlog/spdlog.h>
 // 定义内部上下文结构
 struct PiperContext {
     piper::PiperConfig config;
@@ -23,9 +24,7 @@ PiperContext* piper_wrapper_init(const char* espeak_data_path, const char* model
         // 设置 PiperConfig
         context->config.eSpeakDataPath = espeak_data_path;
         context->config.useESpeak = true;
-
-        // 初始化 Piper
-        piper::initialize(context->config);
+        spdlog::set_level(spdlog::level::debug);
 
         // 准备加载模型
         std::basic_string<char, std::char_traits<char>, std::allocator<char>> modelPath(model_path);
@@ -49,6 +48,9 @@ PiperContext* piper_wrapper_init(const char* espeak_data_path, const char* model
                     speakerId,
                     false // 不使用 CUDA
             );
+            // 初始化 Piper
+            piper::initialize(context->config);
+
             context->initialized = true;
             return context;
         } catch (const std::exception& e) {

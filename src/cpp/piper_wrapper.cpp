@@ -24,8 +24,6 @@ PiperContext* piper_wrapper_init(const char* espeak_data_path, const char* model
         context->config.eSpeakDataPath = espeak_data_path;
         context->config.useESpeak = true;
 
-        // 初始化 Piper
-        piper::initialize(context->config);
 
         // 准备加载模型
         std::basic_string<char, std::char_traits<char>, std::allocator<char>> modelPath(model_path);
@@ -49,6 +47,9 @@ PiperContext* piper_wrapper_init(const char* espeak_data_path, const char* model
                     speakerId,
                     false // 不使用 CUDA
             );
+            // 初始化 Piper
+            piper::initialize(context->config);
+
             context->initialized = true;
             return context;
         } catch (const std::exception& e) {

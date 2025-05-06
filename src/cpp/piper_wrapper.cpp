@@ -31,14 +31,13 @@ PiperContext* piper_wrapper_init(const char* espeak_data_path, const char* model
         // 设置 PiperConfig
         context->config.eSpeakDataPath = espeak_data_path;
         context->config.useESpeak = true;
+        context->voice.synthesisConfig.sampleRate = 48000; // 设置默认采样率
         // 设置语言
         if (language && strlen(language) > 0) {
             std::string languageCopy(language);
             // 在eSpeak配置中设置语言
             context->voice.phonemizeConfig.eSpeak.voice = languageCopy;
             // 调整 eSpeak 的其他参数可能也有帮助
-            context->voice.phonemizeConfig.eSpeak.rate = 100; // 调整语速
-            context->voice.phonemizeConfig.eSpeak.pitch = 50; // 调整音高
             std::cout << "Setting voice language to: " << languageCopy << std::endl;
         }
         spdlog::set_level(spdlog::level::debug);
@@ -98,7 +97,7 @@ int piper_wrapper_text_to_audio(PiperContext* context, const char* text,
 
         // 打印调试信息
         std::cout << "Starting synthesis for text: " << text << std::endl;
-
+        context->voice.phonemizeConfig.eSpeak.voice = "cmn";
         // 执行文本到语音转换
         piper::textToAudio(
                 context->config,

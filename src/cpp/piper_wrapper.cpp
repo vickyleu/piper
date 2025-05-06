@@ -98,7 +98,7 @@ void piper_wrapper_terminate(PiperContext* context) {
 
 // 文本转语音
 int piper_wrapper_text_to_audio(PiperContext* context, const char* text,
-                                short** audio_buffer, int* audio_length,,int sampleRate,int channels) {
+                                short** audio_buffer, int* audio_length,int sampleRate,int channels) {
     if (!context || !context->initialized || !text || !audio_buffer || !audio_length) {
         std::cerr << "Invalid arguments passed to piper_wrapper_text_to_audio" << std::endl;
         return -1;

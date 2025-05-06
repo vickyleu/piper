@@ -47,24 +47,25 @@ endif()
 
 # ---- soxr ---
 
-if(NOT DEFINED SOXR_DIR)
+if(NOT DEFINED SOXR_DOWNLOAD_DIR)
 set(SOXR_VERSION "0.1.3")
 set(SOXR_DIR "${CMAKE_CURRENT_BINARY_DIR}/soxr_install")
+set(SOXR_DOWNLOAD_DIR "${CMAKE_CURRENT_BINARY_DIR}/soxr")
 # 获取当前工具链文件的绝对路径
 get_filename_component(TOOLCHAIN_FILE_ABS "${CMAKE_TOOLCHAIN_FILE}" ABSOLUTE)
 include(ExternalProject)
 ExternalProject_Add(
-soxr_external
-PREFIX "${CMAKE_CURRENT_BINARY_DIR}/soxr"
-URL "https://sourceforge.net/projects/soxr/files/soxr-${SOXR_VERSION}-Source.tar.xz"
-CMAKE_ARGS
--DCMAKE_TOOLCHAIN_FILE:FILEPATH=${TOOLCHAIN_FILE_ABS}
--DCMAKE_INSTALL_PREFIX:FILEPATH=${SOXR_DIR}
--DBUILD_SHARED_LIBS:BOOL=OFF
--DBUILD_TESTS:BOOL=OFF
--DBUILD_EXAMPLES:BOOL=OFF
--DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=ON
---no-warn-unused-cli  # 抑制无关警告
+    soxr_external
+    PREFIX "${SOXR_DOWNLOAD_DIR}"
+    URL "https://sourceforge.net/projects/soxr/files/soxr-${SOXR_VERSION}-Source.tar.xz"
+    CMAKE_ARGS
+    -DCMAKE_TOOLCHAIN_FILE:FILEPATH=${TOOLCHAIN_FILE_ABS}
+    -DCMAKE_INSTALL_PREFIX:FILEPATH=${SOXR_DIR}
+    -DBUILD_SHARED_LIBS:BOOL=OFF
+    -DBUILD_TESTS:BOOL=OFF
+    -DBUILD_EXAMPLES:BOOL=OFF
+    -DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=ON
+    --no-warn-unused-cli  # 抑制无关警告
 )
 add_dependencies(piper soxr_external)
 add_dependencies(test_piper soxr_external)

@@ -222,6 +222,14 @@ install(
   PATTERN "*.so"
   PATTERN "*.a"
 )
+install(
+  DIRECTORY ${SOXR_DIR}/lib/
+  DESTINATION ${CMAKE_INSTALL_PREFIX}
+  FILES_MATCHING
+  PATTERN "*.dll"
+  PATTERN "*.so"
+  PATTERN "*.a"
+)
 # 添加静态库到安装目标
 install(
         TARGETS piper piper_lib

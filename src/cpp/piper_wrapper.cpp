@@ -31,7 +31,6 @@ PiperContext* piper_wrapper_init(const char* espeak_data_path, const char* model
         // 设置 PiperConfig
         context->config.eSpeakDataPath = espeak_data_path;
         context->config.useESpeak = true;
-        context->voice.synthesisConfig.sampleRate = 48000; // 设置默认采样率
         // 设置语言
         if (language && strlen(language) > 0) {
             std::string languageCopy(language);

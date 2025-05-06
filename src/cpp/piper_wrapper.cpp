@@ -33,26 +33,23 @@ PiperContext* piper_wrapper_init(const char* espeak_data_path, const char* model
         context->config.useESpeak = true;
         // 设置语言
         if (language && strlen(language) > 0) {
+            std::string languageCopy(language);
             // 在eSpeak配置中设置语言
-            context->voice.phonemizeConfig.eSpeak.voice = language;
-            std::cout << "Setting voice language to: " << language << std::endl;
+            context->voice.phonemizeConfig.eSpeak.voice = languageCopy;
+            // 调整 eSpeak 的其他参数可能也有帮助
+            context->voice.phonemizeConfig.eSpeak.rate = 100; // 调整语速
+            context->voice.phonemizeConfig.eSpeak.pitch = 50; // 调整音高
+            std::cout << "Setting voice language to: " << languageCopy << std::endl;
         }
         spdlog::set_level(spdlog::level::debug);
         // 打印当前采样率
         std::cout << "Original model sample rate: " << context->voice.synthesisConfig.sampleRate << std::endl;
 
-//        // 设置采样率为48000Hz（或您确认设备支持的值）
-//        context->voice.synthesisConfig.sampleRate = sampleRate;
-//        context->voice.synthesisConfig.channels = channels;
-
-        // 再次打印确认
-//        std::cout << "Modified sample rate: " << context->voice.synthesisConfig.sampleRate << std::endl;
-
         // 准备加载模型
-        std::basic_string<char, std::char_traits<char>, std::allocator<char>> modelPath(model_path);
-        std::basic_string<char, std::char_traits<char>, std::allocator<char>> configPath =
-                (config_path) ? std::basic_string<char, std::char_traits<char>, std::allocator<char>>(config_path) :
-                std::basic_string<char, std::char_traits<char>, std::allocator<char>>("");
+        std::string model_pathCopy(model_path);
+        std::string modelPath = model_pathCopy.empty() ? "" : model_pathCopy;
+        std::string config_pathCopy(config_path);
+        std::string configPath = config_pathCopy.empty() ? "" : config_pathCopy;
 
         // 设置 speaker ID
         std::optional<long long> speakerId;
@@ -83,16 +80,6 @@ PiperContext* piper_wrapper_init(const char* espeak_data_path, const char* model
     } catch (const std::exception& e) {
         std::cerr << "Error initializing piper: " << e.what() << std::endl;
         return nullptr;
-    }
-}
-
-// 释放 Piper 资源
-void piper_wrapper_terminate(PiperContext* context) {
-    if (context) {
-        if (context->initialized) {
-            piper::terminate(context->config);
-        }
-        delete context;
     }
 }
 
@@ -145,7 +132,7 @@ int piper_wrapper_text_to_audio(PiperContext* context, const char* text,
             // 1. 将short转换为float用于soxr处理（可选，取决于您的soxr配置）
             std::vector<float> floatInput(audioBuffer.size());
             for (size_t i = 0; i < audioBuffer.size(); i++) {
-            floatInput[i] = audioBuffer[i] / 32768.0f;
+                floatInput[i] = audioBuffer[i] / 32768.0f;
             }
 
             // 2. 计算输出缓冲区大小
@@ -155,7 +142,7 @@ int piper_wrapper_text_to_audio(PiperContext* context, const char* text,
             // 3. 配置soxr
             soxr_error_t error;
             soxr_io_spec_t io_spec = soxr_io_spec(SOXR_FLOAT32_I, SOXR_FLOAT32_I);
-            soxr_quality_spec_t quality_spec = soxr_quality_spec(SOXR_HQ, 0);
+            soxr_quality_spec_t quality_spec = soxr_quality_spec(SOXR_VHQ, 0); // 使用最高质量
 
             // 4. 创建soxr重采样器
             soxr_t soxr = soxr_create(
@@ -230,6 +217,17 @@ int piper_wrapper_text_to_audio(PiperContext* context, const char* text,
         return -1;
     }
 }
+
+// 释放 Piper 资源
+void piper_wrapper_terminate(PiperContext* context) {
+    if (context) {
+        if (context->initialized) {
+            piper::terminate(context->config);
+        }
+        delete context;
+    }
+}
+
 // 释放音频缓冲区
 void piper_wrapper_free_audio(short* audio_buffer) {
     if (audio_buffer) {

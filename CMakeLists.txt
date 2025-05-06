@@ -45,6 +45,32 @@ if(NOT DEFINED FMT_DIR)
   add_dependencies(test_piper fmt_external)
 endif()
 
+# ---- soxr ---
+
+if(NOT DEFINED SOXR_DIR)
+set(SOXR_VERSION "0.1.3")
+set(SOXR_DIR "${CMAKE_CURRENT_BINARY_DIR}/soxr_install")
+# 获取当前工具链文件的绝对路径
+get_filename_component(TOOLCHAIN_FILE_ABS "${CMAKE_TOOLCHAIN_FILE}" ABSOLUTE)
+include(ExternalProject)
+ExternalProject_Add(
+soxr_external
+PREFIX "${CMAKE_CURRENT_BINARY_DIR}/soxr"
+URL "https://sourceforge.net/projects/soxr/files/soxr-${SOXR_VERSION}-Source.tar.xz"
+CMAKE_ARGS
+-DCMAKE_TOOLCHAIN_FILE:FILEPATH=${TOOLCHAIN_FILE_ABS}
+-DCMAKE_INSTALL_PREFIX:FILEPATH=${SOXR_DIR}
+-DBUILD_SHARED_LIBS:BOOL=OFF
+-DBUILD_TESTS:BOOL=OFF
+-DBUILD_EXAMPLES:BOOL=OFF
+-DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=ON
+--no-warn-unused-cli  # 抑制无关警告
+)
+add_dependencies(piper soxr_external)
+add_dependencies(test_piper soxr_external)
+endif()
+
+
 # ---- spdlog ---
 
 if(NOT DEFINED SPDLOG_DIR)
@@ -106,6 +132,7 @@ target_link_libraries(test_piper PRIVATE piper_lib)
 target_link_libraries(piper_lib PRIVATE
   fmt
   spdlog
+  soxr
   espeak-ng
   piper_phonemize
   onnxruntime
@@ -114,18 +141,21 @@ target_link_libraries(piper_lib PRIVATE
   ${PIPER_EXTRA_LIBRARIES}
 )
 add_dependencies(piper_lib fmt_external)
+add_dependencies(piper_lib soxr_external)
 add_dependencies(piper_lib spdlog_external)
 add_dependencies(piper_lib piper_phonemize_external)
 
 target_link_directories(piper_lib PUBLIC
   ${FMT_DIR}/lib
   ${SPDLOG_DIR}/lib
+  ${SOXR_DIR}/lib
   ${PIPER_PHONEMIZE_DIR}/lib
 )
 
 target_include_directories(piper_lib PUBLIC
   ${FMT_DIR}/include
   ${SPDLOG_DIR}/include
+  ${SOXR_DIR}/include
   ${PIPER_PHONEMIZE_DIR}/include
 )
 
@@ -145,6 +175,7 @@ target_include_directories(
   test_piper PUBLIC
   ${FMT_DIR}/include
   ${SPDLOG_DIR}/include
+  ${SOXR_DIR}/include
   ${PIPER_PHONEMIZE_DIR}/include
 )
 
@@ -152,12 +183,14 @@ target_link_directories(
   test_piper PUBLIC
   ${FMT_DIR}/lib
   ${SPDLOG_DIR}/lib
+  ${SOXR_DIR}/lib
   ${PIPER_PHONEMIZE_DIR}/lib
 )
 
 target_link_libraries(test_piper PUBLIC
   fmt
   spdlog
+  soxr
   espeak-ng
   piper_phonemize
   onnxruntime
